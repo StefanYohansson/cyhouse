@@ -1,5 +1,5 @@
 var modules = require('../src/models/Module');
 
-describe("A test suite", function() {
-   modules.getActions();
+describe("Save module", function() {
+   modules.saveModule('led_sketch','Lab', true);
 });
