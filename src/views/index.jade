@@ -5,10 +5,15 @@ html(ng-app='App')
     title CyHouse
     meta(name='viewport' content='initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width')
     link(rel='stylesheet' href='/lib/ionic/css/ionic.min.css')
+    link(rel='stylesheet' href='/lib/jointjs/joint.min.css')
     link(rel='stylesheet' href='/css/custom.css')
     script(src='/lib/ionic/js/ionic.bundle.min.js')
     script(src='/lib/jquery/jquery-1.11.1.min.js')
     script(src='/lib/fabricjs/fabric.min.js')
+    script(src='/lib/jointjs/joint.all.min.js')
+    script(src='/lib/jointjs/joint.shapes.devs.min.js')
+    script(src='/lib/chart/Chart.min.js')
+    script(src='/js/utils.js')
     script(src='/js/app.js')
 
   body
@@ -30,7 +35,7 @@ html(ng-app='App')
                   input(type='password' ng-model='user.password' placeholder='Password')
             div(class='item tabs tabs-secondary tabs-icon-left')
               a(class='tab-item' ng-click='signIn(user)')
-                i(class='icon ion-key') 
+                i(class='icon ion-log-in') 
                 | Logar
                 
     script(type='text/ng-template' id='forgot-password.html')
@@ -40,22 +45,40 @@ html(ng-app='App')
           
     script(type='text/ng-template' id='menu.html')
       ion-side-menus
-        ion-side-menu(side='left')
-          div(class='bar bar-header bar-positive')
-            h1(class='title') Menu
-          ion-content(scroll='true' class='has-header')
-            ion-list
-              ion-item(nav-clear menu-close href='#/app/welcome')
-                | Welcome1
-              ion-item(nav-clear menu-close href='#/app/logic')
-                | Lógica
-              ion-item(nav-clear href='logout')
-                | Sair
         ion-side-menu-content(drag-content='false' scroll='false')
           ion-nav-bar(class='bar-positive nav-title-slide-ios7')
           ion-nav-buttons(side='left')
             button(menu-toggle='left' class='button button-icon icon ion-navicon')
           ion-nav-view
+        ion-side-menu(side='left')
+          div(class='bar bar-header bar-positive')
+            h1(class='title') Menu
+          ion-content(scroll='true' class='has-header')
+            ion-list
+              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/welcome')
+                i(class='icon ion-email')
+                | Welcome1
+              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/logic')
+                i(class='icon ion-home')
+                | Minha casa
+              ion-item(class='item-icon-left' nav-clear menu-close href='#/app/statistics')
+                i(class='icon ion-stats-bars')
+                | Estatísticas
+              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/statistics')
+                i(class='icon ion-stats-bars')
+                | Agenda(todo list)
+              ion-item(class='item-icon-left' nav-clear menu-close href='#/app/logic')
+                i(class='icon ion-lightbulb')
+                | Lógica
+              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/logic')
+                i(class='icon ion-levels')
+                | Módulos
+              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/logic')
+                i(class='icon ion-gear-b')
+                | Configurações
+              ion-item(class='item-icon-left' nav-clear href='logout')
+                i(class='icon ion-log-out')
+                | Sair
           
             
     script(type='text/ng-template' id='welcome.html')
@@ -63,8 +86,21 @@ html(ng-app='App')
         ion-content(scroll='false')
           h1 Bem vindoooooo!
           div(draggable class="dragme")
-          
+            
+    script(type='text/ng-template' id='statistics.html')
+      ion-view(title="Estatísticas")
+        ion-content(scroll='false')
+          div(class='item item-text-wrap' style='width: 480px; margin: 10px')
+            |Quantas horas a lâmpada ficou ligada por mês
+          br
+          canvas(id='container' width='480' height='300' style='border: 1px solid black; margin: 10px')
     script(type='text/ng-template' id='logic.html')
       ion-view(title="Lógica")
         ion-content(scroll='false')
-          canvas(id='c' width='480' height='360' style='border: 1px solid black')
+          div(id='output')
+          div(id='container' style='width: 650px; height: 400px; border: 1px solid black')
+          div(class='range range-positive' style='width: 300px')
+            //i(class='icon ion-ios7-search')
+            //input(type='range' min='1' max='100' value='50')
+            //i(class='icon ion-search')
+            

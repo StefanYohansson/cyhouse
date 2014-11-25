@@ -57,3 +57,14 @@
 
 .parent > div {height: 100%;}
 .dragme {display:block;width: 384px;height: 378px; position:absolute; background: red;}
+
+
+/* port styling */
+.available-magnet {
+    fill: yellow;
+}
+
+/* element styling */
+.available-cell rect {
+    stroke-dasharray: 5, 2;
+}
