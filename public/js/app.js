@@ -1,3 +1,5 @@
+"use strict"
+
 var debug;
 angular.module('App', ['ionic'])
 
@@ -17,22 +19,12 @@ angular.module('App', ['ionic'])
     abstract: true,
     url: '/app',
     templateUrl: 'menu.html',
-    controller: function($scope, $state, $http) {
-      $http.post('/isAuth')
-      .success(function(data, status, headers, config){
-        if(!data.auth) $state.go('login');
-      });
-
-      $scope.goTo = function(name) {
-        $state.go(name);
-      };
-    }
-    //controller: 'WelcomeCtrl'
+    controller: 'AppCtrl'
   })
-  $stateProvider.state('app.welcome', {
-    url: '/welcome',
-    templateUrl: 'welcome.html',
-    //controller: 'WelcomeCtrl'
+  $stateProvider.state('app.main', {
+    url: '/main',
+    templateUrl: 'main.html',
+    controller: 'MainCtrl'
   })
   $stateProvider.state('app.statistics', {
     url: '/statistics',
@@ -46,9 +38,16 @@ angular.module('App', ['ionic'])
   })
 })
 .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+  $('input').on('keyup', function(e) {
+    if(e.keyCode == 13) $scope.signIn({username: $('#login').val(), password: $('#passd').val()});
+
+  });
   $http.post('/isAuth')
   .success(function(data, status, headers, config){
-    if(data.auth) $state.go('app.welcome');
+    if(data.auth) {
+      $rootScope.username = data.name;
+      $state.go('app.main');
+    }
   });
 
   $scope.signIn = function(user) {
@@ -61,7 +60,7 @@ angular.module('App', ['ionic'])
     .success(function(data, status, headers, config){
       if(data.auth) {
         $rootScope.username = data.user;
-        $state.go('app.welcome');
+        $state.go('app.main');
       } else {
         $scope.openPopup(data.msg);
       }
@@ -92,15 +91,74 @@ angular.module('App', ['ionic'])
   };
 
 })
+.controller('AppCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+  $http.post('/isAuth')
+  .success(function(data, status, headers, config){
+    if(!data.auth) $state.go('login');
+    $rootScope.username = data.name;
+  });
+
+  $scope.goTo = function(name) {
+    $state.go(name);
+  };
+})
+.controller('MainCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+  var canvas = document.querySelector('#container');
+  var ctx = canvas.getContext('2d');
+  var data = [
+    {
+        value: 64,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Utilizado"
+    },
+    {
+        value: 36,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "Livre"
+    }
+  ];
+  var options = {
+    //Boolean - Whether we should show a stroke on each segment
+    segmentShowStroke : true,
+
+    //String - The colour of each segment stroke
+    segmentStrokeColor : "#fff",
+
+    //Number - The width of each segment stroke
+    segmentStrokeWidth : 2,
+
+    //Number - The percentage of the chart that we cut out of the middle
+    percentageInnerCutout : 50, // This is 0 for Pie charts
+
+    //Number - Amount of animation steps
+    animationSteps : 30,
+
+    //String - Animation easing effect
+    animationEasing : "easeOut",
+
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate : true,
+
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale : false,
+
+    //String - A legend template
+    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+
+  };
+  var myDoughnutChart = new Chart(ctx).Doughnut(data,options);
+
+})
 .controller('StatisticsCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
-  var canvas = document.querySelector("#container");
+  var canvas = document.querySelector('#container');
   var ctx = canvas.getContext('2d');
   var data = {
     labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho"],
     datasets: [
-
       {
-        label: "My Second dataset",
+        label: "Horas/Mês",
         fillColor: "rgba(151,187,205,0.5)",
         strokeColor: "rgba(151,187,205,0.8)",
         highlightFill: "rgba(151,187,205,0.75)",
@@ -155,7 +213,7 @@ angular.module('App', ['ionic'])
   var graph = new joint.dia.Graph;
   var paper = new joint.dia.Paper({
     el: $('#container'),
-    width: 650,
+    width: 850,
     height: 400,
     gridSize: 1,
     model: graph,
@@ -185,11 +243,25 @@ angular.module('App', ['ionic'])
       //console.log(graph.findModelsFromPoint(linkView.sourcePoint));
       //console.log(graph.findModelsFromPoint(linkView.targetPoint));
       // Prevent linking from input ports.
+      if (magnetS && magnetS.getAttribute('mech') === 'lsensor'
+        && magnetT && magnetT.getAttribute('mech') === 'lamp') return false;
+        
       if (magnetS && magnetS.getAttribute('type') === 'input') return false;
       // Prevent linking from output ports to input ports within one element.
       if (cellViewS === cellViewT) return false;
       // Prevent linking to input ports.
       if (magnetT && magnetT.getAttribute('type') === 'input') return true;
+
+
+      if (magnetS && magnetS.getAttribute('mech') === 'operator'
+        && magnetT && magnetT.getAttribute('mech') === 'lamp'
+        && magnetT.getAttribute('type') === 'input'
+        && magnetS.getAttribute('type') === 'output') return true;
+
+      if (magnetS && magnetS.getAttribute('mech') === 'lsensor'
+        && magnetT && magnetT.getAttribute('mech') === 'operator'
+        && magnetT.getAttribute('type') === 'output'
+        && magnetS.getAttribute('type') === 'input') return true;
     },
     validateMagnet: function(cellView, magnet) {
       // Note that this is the default behaviour. Just showing it here for reference.
@@ -198,12 +270,16 @@ angular.module('App', ['ionic'])
     }
   });
   paper.scale(1.5);
-  var m1 = makePort('l_sensor01', [], null);
+  var m1 = makePort('sensorLuz', [], null, 'lsensor');
   graph.addCell(m1);
 
-  var m2 = makePort('relay01', null, [])
-  m2.translate(250, 0);
+  var m2 = makePort('operador', null, null, 'operator');
+  m2.translate(210, 40);
   graph.addCell(m2);
+
+  var m3 = makePort('lampada', null, [], 'lamp')
+  m3.translate(450, 0);
+  graph.addCell(m3);
 
   graph.on('change:source change:target', function(link) {
       var sourcePort = link.get('source').port;
@@ -213,7 +289,6 @@ angular.module('App', ['ionic'])
       var targetPort = link.get('target').port;
       var targetId = link.get('target').id;
       var targetName = link.collection._byId[targetId].attributes.name;
-
       var m = [
           'A <b>' + sourcePort,
           '</b> do elemento <b>' + sourceName,
@@ -225,7 +300,7 @@ angular.module('App', ['ionic'])
   });
 
   function out(m) {
-      $('#output').html(m);
+    $('#output').html(m);
   }
 })
 

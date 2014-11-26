@@ -37,9 +37,9 @@ function makeLine(coords) {
   });
 }
 
-function makePort(name, input, output) {
+function makePort(name, input, output, mech) {
   return new joint.shapes.devs.Model({
-      position: { x: 50, y: 50 },
+      position: { x: 10, y: 50 },
       size: { width: 90, height: 90 },
       inPorts: input || ['Entrada'],
       outPorts: output || ['Saída'],
@@ -47,8 +47,8 @@ function makePort(name, input, output) {
       attrs: {
           '.label': { text: name, 'ref-x': .55, 'ref-y': .2 },
           rect: { fill: '#2ECC71', rx: 5, ry: 5, 'stroke-width': 2 },
-          '.inPorts circle': { fill: '#16A085', magnet: 'passive', type: 'input', name: name},
-          '.outPorts circle': { fill: '#E74C3C', type: 'output', name: name},
+          '.inPorts circle': { fill: '#16A085', magnet: 'passive', mech: mech, type: 'input', name: name},
+          '.outPorts circle': { fill: '#E74C3C', type: 'output', mech: mech, name: name},
 
       }
   });

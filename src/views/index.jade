@@ -18,7 +18,7 @@ html(ng-app='App')
 
   body
     ion-nav-view(animation='slide-left-right')
-    
+      
     script(type='text/ng-template' id='login.html')
       ion-nav-bar(class='bar-positive nav-title-slide-ios7')
       ion-view(title="Login CyHouse")
@@ -30,19 +30,19 @@ html(ng-app='App')
             div(class='item item-body')
               div(class='list list-inset')
                 label(class='item item-input')
-                  input(type='text' ng-model='user.username' placeholder='Username')
+                  input(id='login' type='text' ng-model='user.username' placeholder='Usuário')
                 label(class='item item-input')
-                  input(type='password' ng-model='user.password' placeholder='Password')
+                  input(id='passd' type='password' ng-model='user.password' placeholder='Senha')
             div(class='item tabs tabs-secondary tabs-icon-left')
               a(class='tab-item' ng-click='signIn(user)')
-                i(class='icon ion-log-in') 
+                i(class='icon ion-log-in')
                 | Logar
-                
+
     script(type='text/ng-template' id='forgot-password.html')
       ion-view(title="Esqueci minha senha")
         ion-content(scroll='false' padding='true')
           p duhh
-          
+
     script(type='text/ng-template' id='menu.html')
       ion-side-menus
         ion-side-menu-content(drag-content='false' scroll='false')
@@ -55,9 +55,9 @@ html(ng-app='App')
             h1(class='title') Menu
           ion-content(scroll='true' class='has-header')
             ion-list
-              //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/welcome')
+              ion-item(class='item-icon-left' nav-clear menu-close href='#/app/main')
                 i(class='icon ion-email')
-                | Welcome1
+                | Menu Principal
               //ion-item(class='item-icon-left' nav-clear menu-close href='#/app/logic')
                 i(class='icon ion-home')
                 | Minha casa
@@ -79,28 +79,41 @@ html(ng-app='App')
               ion-item(class='item-icon-left' nav-clear href='logout')
                 i(class='icon ion-log-out')
                 | Sair
+
+    script(type='text/ng-template' id='main.html')
+      ion-view(title="Tela principal")
+        ion-content(scroll='false' padding='true')
+          div(class='item item-text-wrap' style='width: 460px; text-align: center')
+            h1 Bem vindo, {{username}}!
+            
+          div(id='widgets')
+            div(class='list card' style='width: 220px; float: left;')
+              div(class='item')
+                h2(style='text-align: center') Memória do servidor
+                p Memória utilizada
+              div(class='item')
+                canvas(id='container' width='180' height='180' style='')
+                  
+            div(class='list card' style='width: 220px; float: left; margin-left: 20px')
+              div(class='item')
+                h2(style='text-align: center') Temperatura do servidor
+                p Temperatura no processador
+              div(class='item' style='font-weight: bold; font-size: 5.5em; text-align: center; line-height: 170px;  height: 219px')
+                |58°C
           
-            
-    script(type='text/ng-template' id='welcome.html')
-      ion-view(title="EEE")
-        ion-content(scroll='false')
-          h1 Bem vindoooooo!
-          div(draggable class="dragme")
-            
     script(type='text/ng-template' id='statistics.html')
       ion-view(title="Estatísticas")
-        ion-content(scroll='false')
-          div(class='item item-text-wrap' style='width: 480px; margin: 10px')
+        ion-content(scroll='false' padding='true')
+          div(class='item item-text-wrap' style='width: 480px;')
             |Quantas horas a lâmpada ficou ligada por mês
-          br
-          canvas(id='container' width='480' height='300' style='border: 1px solid black; margin: 10px')
+          canvas(id='container' width='680' height='350' style='border: 1px solid black; margin-top: 10px')
     script(type='text/ng-template' id='logic.html')
       ion-view(title="Lógica")
-        ion-content(scroll='false')
-          div(id='output')
-          div(id='container' style='width: 650px; height: 400px; border: 1px solid black')
-          div(class='range range-positive' style='width: 300px')
-            //i(class='icon ion-ios7-search')
-            //input(type='range' min='1' max='100' value='50')
-            //i(class='icon ion-search')
-            
+        ion-content(scroll='false' padding='true')
+          div(id='output' class='item item-text-wrap' style='width: 650px;')
+            |Vazio
+          div(id='container' style='width: 850px; height: 400px; border: 1px solid black; margin-top: 10px')
+          //div(class='range range-positive' style='width: 300px')
+            i(class='icon ion-ios7-search')
+            input(type='range' min='1' max='100' value='50')
+            i(class='icon ion-search')

@@ -5,8 +5,9 @@ module.exports = function(passport) {
   var LocalStrategy = require('passport-local').Strategy;
 
   var Users = [
-      { id: 1, username: 'jaon', password: 'jaon', name: 'Jaonze'}
+      { id: 1, username: 'jaon', password: 'jaon', name: 'João'}
     , { id: 2, username: 'stefan', password: 'stefan', name: 'Stofo'}
+    
   ];
 
   passport.serializeUser(function(user, done) {

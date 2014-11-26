@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function(req, res) {
-  console.log(req.isAuthenticated());
-  res.send({auth: req.isAuthenticated()});
+  var isAuth = req.isAuthenticated()
+  if(req.isAuthenticated()) res.send({ auth: true, name: req.user.name });
+  else res.send({ auth: false });
 
 });
 

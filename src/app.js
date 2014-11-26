@@ -40,8 +40,8 @@ var routes = {
   '/board': 'board',
   '/login': 'login',
   '/isAuth': 'isAuth'
-  };
-utils.routesLoader(routes, app);
+
+}; utils.routesLoader(routes, app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
